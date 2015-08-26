@@ -106,7 +106,7 @@ module awk.grid {
             return result;
         }
 
-//sets mini filter. returns true if it changed from last value, otherwise false
+        //sets mini filter. returns true if it changed from last value, otherwise false
         setMiniFilter(newMiniFilter: any) {
             newMiniFilter = utils.makeNull(newMiniFilter);
             if (this.miniFilter === newMiniFilter) {
@@ -205,7 +205,7 @@ module awk.grid {
                 return null;
             }
             var selectedValues = <any>[];
-            utils.iterateObject(this.selectedValuesMap, function (key: any) {
+            utils.iterateObject(this.selectedValuesMap, function(key: any) {
                 selectedValues.push(key);
             });
             return selectedValues;
@@ -216,6 +216,14 @@ module awk.grid {
                 this.selectNothing();
                 for (var i = 0; i < model.length; i++) {
                     var newValue = model[i];
+                    if (this.uniqueValues.indexOf(newValue) < 0) {
+                        //Didn't find the value. Check if its because of "null" string.
+                        if (newValue === 'null') {
+                            newValue = null;
+                        }
+                    }
+
+
                     if (this.uniqueValues.indexOf(newValue) >= 0) {
                         this.selectValue(model[i]);
                     } else {
